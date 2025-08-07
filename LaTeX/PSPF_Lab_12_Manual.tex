@@ -610,7 +610,85 @@ int main()
 
 
 \begin{enumerate}
-    \item 
+    \item Dynamically allocate a two dimensional array to represent a 2x2 matrix, and implement the function 
+    \textcolor{red}{\texttt{int determinant2x2(int** matrix)}} to calculate the determinant of the matrix. Do not 
+    forget to free the allocated memory properly.
+
+    \begin{align*}
+        \begin{vmatrix}
+            a & b \\
+            c & d \\
+        \end{vmatrix} &= a \times d - b \times c
+    \end{align*}
+
+    \item Dynamically allocate a two dimensional array to represent a 3x3 matrix, and implement the function 
+    \textcolor{red}{\texttt{int determinant3x3(int** matrix)}} to calculate the determinant of the matrix. Do not 
+    forget to free the allocated memory properly.
+
+    \begin{align*}
+        \begin{vmatrix}
+            a_{11} & a_{12} & a_{13} \\
+            a_{21} & a_{22} & a_{23} \\
+            a_{31} & a_{32} & a_{33} \\
+        \end{vmatrix} &= a_{11} \times 
+            \begin{vmatrix}
+                a_{22} & a_{23} \\  
+                a_{32} & a_{33} \\  
+            \end{vmatrix} - a_{12} \times 
+            \begin{vmatrix}
+                a_{21} & a_{23} \\  
+                a_{31} & a_{33} \\ 
+            \end{vmatrix} + a_{13} \times 
+            \begin{vmatrix}
+                a_{21} & a_{22} \\  
+                a_{31} & a_{32} \\
+            \end{vmatrix}
+    \end{align*}
+
+
+
+    \item Dynamically allocate a two dimensional array to represent a 3x3 matrix, and implement the function 
+    \textcolor{red}{\texttt{int determinant3x3(int** matrix)}} to calculate the determinant of the matrix using 
+    the given algorithm. Do not forget to free the allocated memory properly.
+
+    \textbf{3x3 Determinant Shortcut:}
+
+\begin{align*}
+    D &= 
+    \begin{vmatrix}
+    11 & 12 & 13 \\
+    21 & 22 & 23 \\
+    31 & 32 & 33 \\
+    \end{vmatrix} \\
+    \intertext{Write as follows (After writing col 3, write col 1 and col 2 again.)}
+    &\begin{matrix}
+    \colorbox{lime}{11} & 12 & 13 & \colorbox{orange}{11} & 12 \\
+    21 & \colorbox{lime}{22} & \colorbox{orange}{23} & 21 & 22 \\
+    31 & \colorbox{orange}{32} & \colorbox{lime}{33} & 31 & 32 \\
+    \end{matrix} \\
+    \intertext{Do as follows:}
+    D &= [\colorbox{lime}{$(11 \times 22 \times 33)$} + (12 \times 23 \times 31) + (13 \times 21 \times 32) ] \\&- [(31 \times 22 \times 13) + \colorbox{orange}{$(32 \times 23 \times 11)$} + (33 \times 21 \times 12) ]\\
+    D &= 7986 + 8556 + 8736 - (8866 + 8096 + 8316) \\
+    D &= 0  \\
+\end{align*}
+
+    \begin{center}
+        \href{https://www.youtube.com/watch?v=z5Yf7QwrotE}{How To Find the Determinant of a 3x3 Matrix - The Easy Way!}
+    \end{center}
+
+    \item Define the following functions to implement the ROT-13 cipher for all capital letters 
+    only (ASCII-65 to ASCII-90).
+    
+    \textcolor{red}{\texttt{char* rot\_13\_encrypt(char* str)}}  
+    
+    \textcolor{red}{\texttt{char* rot\_13\_decrypt(char* str)}}
+
+
+    \item Dynamically allocate an array of integers and implement the function 
+    \textcolor{red}{\texttt{void bubbleSortAsc(int* arr, int size)}} to sort the array in ascending order 
+    using the bubble sort algorithm. Do not forget to free the allocated memory.
+    
+
 \end{enumerate}
 
 
