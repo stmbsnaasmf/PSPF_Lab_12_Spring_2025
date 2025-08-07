@@ -1,0 +1,692 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}			    % Use this package to include images %Path relative to the main .tex file 
+\graphicspath{ {./Images/} }
+\usepackage{amsmath}			    % A library of many standard math expressions
+\usepackage{mathtools}              % For Aboxed{} (https://tex.stackexchange.com/questions/346577/boxed-and-align)
+% \usepackage[margin=1in]{geometry} % Sets 1in margins. 
+\usepackage[margin=3cm]{geometry} % Sets 1in margins. 
+\usepackage{fancyhdr}			    % Creates headers and footers
+\usepackage{enumerate}              % These two packages give custom labels to a list
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}               % https://www.overleaf.com/learn/latex/Hyperlinks
+\usepackage{xcolor}
+\usepackage[svgnames]{xcolor}
+\usepackage{float}
+\usepackage{cmupint}                % For upright integrals. https://tex.stackexchange.com/questions/503527/how-to-write-upright-integrals-with-automatic-sizing
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{titling}
+\usepackage{minted}                 % For code blocks
+\usemintedstyle{monokai}            % For code blocks
+\definecolor{bg}{HTML}{282828}      % For code blocks, from https://github.com/kevinsawicki/monokai
+\usepackage{nameref}
+\usepackage{caption}                % To use \caption*{} to show only the caption text without "Table 1: <text>"
+% \usepackage{mathtools, tccomicsans}
+% \usepackage{comicsans}
+% \usepackage[main,largesymbols]{tccomicsans} % https://www.reddit.com/r/LaTeX/comments/1l5no5d/comment/mwm64ze/
+\renewcommand*\contentsname{Summary}
+% \renewcommand{\contentsname}{\centering \normalfont\normalsize Contents}
+\renewcommand{\contentsname}{\centering \bfseries\Large Contents}
+% \renewcommand{\cftaftertoctitle}{\hfill}
+
+\hypersetup
+{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    %pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+
+% \title{OOP Lab Manual 05}
+% \author{STM}
+% \date{December 2024}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+
+    \vspace*{-4em}
+    \includegraphics[width=0.5\textwidth]{Bismillah.png}%\\[2cm]
+    \vspace*{5em}
+
+    
+    \vspace*{1cm}
+
+     \includegraphics[width=0.5\textwidth]{GU Tech 1685x1330.png}\\[2cm]
+
+    \MakeUppercase{\Huge \textbf{GU TECH}}\\[1.5ex]
+    
+    \vspace*{1cm}
+    
+    \Huge Problem Solving \& Programming Fundamentals \\[1.5ex]
+    \LARGE Lab 12 \\[2cm]
+
+    % {\Large STM} \\ [2cm]
+
+    {\Large \today}\\[1cm]
+    
+\end{titlepage}
+
+\newpage
+
+% \vspace*{4cm}
+% \begin{center}
+%     \Huge \textbf{Outline}
+% \end{center}
+
+% \begin{itemize}
+%    \item \nameref{Functions}
+% \end{itemize}
+
+\tableofcontents
+
+\newpage
+\addcontentsline{toc}{part}{Miscellaneous}
+\part*{\centering Miscellaneous}
+
+
+
+
+
+\addcontentsline{toc}{section}{Array Indexing \& Decay To Pointer}
+\section*{Array Indexing \& Decay To Pointer}
+
+\begin{itemize}
+    \item With \href{https://stackoverflow.com/questions/17752978/exceptions-to-array-decaying-into-a-pointer}{some exceptions}, array names always decay into pointers.
+    \item Arrays are always passed by reference (and not by value) in C and C++.
+\end{itemize}
+
+\noindent Also see: \href{https://stackoverflow.com/questions/67379858/in-c-how-come-the-address-of-array-array-array0-are-the-same}{Stackoverflow: In C, how come the address of array, \&array, \&array[0] are the same?} \\
+
+\noindent Consider the follwoing program and its output. 
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+
+int main()
+{
+    int arr[] = {6, 9, 10};
+
+    printf("%d\n", arr);        //6684356
+    printf("%d\n", &arr);       //6684356
+    printf("%d\n", &arr[0]);    //6684356
+    printf("%d\n", &arr[1]);    //6684360
+    printf("%d\n", &arr[2]);    //6684364
+
+    return 0;
+}
+
+\end{minted}
+
+% \vspace{1cm}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+    \begin{tabular}{| c | c | c |} 
+    \hline
+    &  &  \\
+    \textbf{Address} & \textbf{Value} & \textbf{Index}  \\
+    &  &  \\
+    \hline
+    &  &  \\
+    6684356 & 06 & a[0] \\
+    &  &  \\
+    \hline
+    &  &  \\
+    6684360 & 09 & a[1] \\
+    &  &  \\
+    \hline
+    &  &  \\
+    6684364 & 10 & a[2] \\
+    &  &  \\
+    \hline
+    \end{tabular}
+}
+% \caption*{Array}
+\end{table}
+
+\newpage
+
+\noindent Also consider the following program and its ouput:
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+
+int main()
+{
+    int arr[] = {6, 9, 10};
+
+    int* ptr = arr;
+
+    printf("Value: %02d at address: %d\n", *(ptr + 0), (ptr + 0));
+    printf("Value: %02d at address: %d\n", *(ptr + 1), (ptr + 1));
+    printf("Value: %02d at address: %d\n", *(ptr + 2), (ptr + 2));
+
+    printf("Value: %02d at address: %d\n", *(arr + 0), (arr + 0));
+    printf("Value: %02d at address: %d\n", *(arr + 1), (arr + 1));
+    printf("Value: %02d at address: %d\n", *(arr + 2), (arr + 2));
+
+    return 0;
+}
+
+\end{minted}
+
+\vspace{1cm}
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+    Value: 06 at address: 6684352
+    Value: 09 at address: 6684356
+    Value: 10 at address: 6684360
+
+    Value: 06 at address: 6684352
+    Value: 09 at address: 6684356
+    Value: 10 at address: 6684360
+        
+\end{minted}
+
+
+\newpage
+\addcontentsline{toc}{section}{Returning Arrays From Functions}
+\section*{Returning Arrays From Functions}
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+    int* function(int* array, int size);
+    
+    //This function returns the same array that is passed to it.
+
+\end{minted}
+
+\vspace{1cm}
+
+\noindent There are a few cases when an array (a pointer to its first element) is returned by a function: 
+
+\begin{enumerate}
+    \item \textbf{Please never do this, it does not work:} We declare an array on stack within the function call, and return a pointer to its first element.
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+
+int* function()
+{
+    int array[10];
+    for (int i = 0; i < 10; i++)
+    {
+        array[i] = i;
+        printf("Value: %02d at address: %d\n", 
+        *(array + i), (array + i));
+    }
+
+    return array;
+}
+
+int main()
+{
+    int* array = function();
+    for (int i = 0; i < 10; i++)
+    {
+        printf("Value: %02d at address: %d\n", 
+        *(array + 0), (array + 0));
+    }
+
+    return 0;
+}
+
+\end{minted}
+
+\vspace{1cm} 
+
+\noindent It does not work because the array is created on stack during the function call, and when the function has run its course, the array is popped from the stack and no longer exists, 
+and the returned pointer points to an address that is no longer the base address of the array. \\ 
+
+    \newpage
+
+    \item We create an array in heap memory by dynamic memory allocation, and return a pointer to the array. 
+    
+    \begin{itemize}
+        \item Arrays / objects created in heap by dynamic memory allocation continue to exist even after the function that creates them, has run its course.
+        \item They continue to exist until we \textbf{explicitly} free the heap memory.
+    \end{itemize}
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int* returnHeapArray(int size)
+{
+    int* array = (int*) malloc(size * sizeof(int));
+
+    for (int i = 0; i < 10; i++)
+    {
+        array[i] = i;
+        printf("Value: %02d at address: %d\n", 
+        *(array + i), (array + i));
+    }
+
+    return array;
+}
+
+int main()
+{
+    int arrSize = 10;
+    int* arr = returnHeapArray(arrSize);
+
+    printf("\n");
+
+    for (int i = 0; i < arrSize; i++)
+    {
+        printf("Value: %02d at address: %d\n", 
+        *(arr + i), (arr + i));
+    }
+
+    free(arr);
+
+    return 0;
+}
+
+\end{minted}
+
+    \newpage
+
+    \item We return the same array that is taken by the function as a parameter.
+    
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+
+char* tail(char* str)
+{
+    int index = 0;
+    while (str[index] != '\0')
+    {
+        str[index] = str[index + 1];
+        index++;
+    }
+
+    return str;
+}
+
+int main()
+{
+    char str[] = "kitten";
+    printf("%s\n", str);
+    //str = tail(str);  //Does not work.
+    char* strTwo = tail(str);
+    printf("%s\n", strTwo);
+
+    strTwo = tail(str);
+    printf("%s\n", strTwo);
+
+    strTwo = tail(str);
+    printf("%s\n", strTwo);
+
+    strTwo = tail(str);
+    printf("%s\n", strTwo);
+
+    strTwo = tail(str);
+    printf("%s\n", strTwo);
+
+    strTwo = tail(str);
+    printf("%s\n", strTwo);
+
+    return 0;
+}
+
+\end{minted}
+
+\textbf{Note:} The follwoing syntax does not work:
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+    char str[] = "kitten";
+    printf("%s\n", str);
+    str = tail(str);  //Compile time error
+    //[Error] assignment to expression with array type
+    printf("%s\n", strTwo);
+
+\end{minted}
+
+    \vspace{1cm}
+
+    Stackoverflow: \href{https://stackoverflow.com/questions/37225244/error-assignment-to-expression-with-array-type-error-when-i-assign-a-struct-f}{[Error] assignment to expression with array type}
+
+
+
+
+
+    \item We can also create a \textcolor{red}{\texttt{static}} array in a function and return it, and it will continue to exist even outside of the function, but this manual does not cover 
+    that.
+
+\end{enumerate}
+
+
+\newpage
+\addcontentsline{toc}{section}{Size Of Pointers}
+\section*{Size Of Pointers}
+
+\noindent The size of a pointer in C/C++ is not determined by the type of data it points to, it is determined by the system's architecture. \\
+
+\noindent On a 32-bit system, the size of a pointer is typically 4 bytes because the system uses 32-bit memory addresses, which require 4 bytes to store. On a On a 64-bit system, the size of 
+a pointer is typically 8 bytes. \\
+
+\newpage
+\addcontentsline{toc}{section}{Type Casting}
+\section*{Type Casting}
+
+\noindent Typecasting in C, also known as type conversion, is the process of converting a value from one data type to another. This conversion can be done either automatically by the compiler 
+(implicit typecasting) or explicitly by the programmer (explicit typecasting).
+
+\addcontentsline{toc}{subsection}{Implicit Type Casting}
+\subsection*{Implicit Type Casting}
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+
+int main()
+{
+    double a = 1.5;
+    int b = a;
+
+    printf("%d\n", b);  //1
+
+    return 0;
+}
+
+\end{minted}
+
+\newpage
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+
+int main()
+{
+    char c = 65;
+    printf("%d\t", c);
+    printf("%c\n", c);
+
+    int a = 97;
+    printf("%d\t", a);
+    printf("%c\n", a);
+
+    a = 48;
+    printf("%d\t", a);
+    printf("%c\n", a);
+
+    return 0;
+}
+
+\end{minted}
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+    65      A
+    97      a
+    48      0
+
+\end{minted}
+
+\newpage
+\addcontentsline{toc}{subsection}{Explicit Type Casting}
+\subsection*{Explicit Type Casting}
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+
+int main()
+{
+    int a = 15, b = 2;
+    double c = a / b;
+
+    printf("%f\n", c);  //7.000000
+    c = (double) a / b;
+    printf("%f\n", c);  //7.500000
+
+    return 0;
+}
+
+\end{minted}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\addcontentsline{toc}{part}{Dynamic Memory Allocation}
+\part*{\centering Dynamic Memory Allocation}
+
+\noindent Variables declared on stack have a limited lifetime. They go out of scope when the function that created them, has run its course. \\
+
+\noindent Dynamic memory allocation allows us to create variables on heap, that continue to exist even after a function that creates them, has run its course. It allows us to manage memory during 
+runtime, rather than at compile time. This is useful when the size of data structures, like arrays, is not known in advance or can change during program execution. Memory is allocated from 
+the heap and must be manually managed. \\
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int arrSize = 10;
+    int* arr = (int*) malloc(arrSize * sizeof(int));
+
+    for (int i = 0; i < 10; i++)
+    {
+        arr[i] = i;
+        printf("Value: %02d at address: %d\n", 
+        *(arr + i), (arr + i));
+    }
+
+    free(arr);
+    arr = NULL;
+
+    return 0;
+}
+
+\end{minted}
+
+\newpage
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int arrSize = 10;
+    int* arr = (int*) calloc(arrSize, sizeof(int));
+
+    for (int i = 0; i < 10; i++)
+    {
+        arr[i] = i;
+        printf("Value: %02d at address: %d\n", 
+        *(arr + i), (arr + i));
+    }
+
+    free(arr);
+    arr = NULL;
+
+    return 0;
+}
+
+\end{minted}
+
+\vspace{1cm}
+
+\noindent The \textcolor{red}{\texttt{malloc()}} function allocates memory and leaves the memory uninitialized. 
+
+\noindent The \textcolor{red}{\texttt{calloc()}} function allocates memory and initializes all the bits to zero. \\
+
+\newpage
+\addcontentsline{toc}{section}{Allocating 2D Arrays}
+\section*{Allocating 2D Arrays}
+
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+#include <stdio.h>
+#include <stdlib.h>
+
+void printMatrix(int** matrix, int noOfRows, int noOfCols)
+{
+    for (int i = 0; i < noOfRows; i++)
+    {
+        for (int j = 0; j < noOfCols; j++)
+        {
+            printf("%02d\t", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main()
+{
+    int noOfRows = 3, noOfCols = 3;
+
+    int** matrix = (int**) malloc(noOfRows * sizeof(int*));
+
+    for (int i = 0; i < noOfRows; i++)
+    {
+        matrix[i] = malloc(noOfCols * sizeof(int));
+    }
+
+    printMatrix(matrix, noOfRows, noOfCols);
+
+    for (int i = 0; i < noOfRows; i++)
+    {
+        for (int j = 0; j < noOfCols; j++)
+        {
+            matrix[i][j] = 11;
+        }
+    }
+
+    printMatrix(matrix, noOfRows, noOfCols);
+
+
+
+
+
+
+    for (int i = 0; i < noOfRows; i++)
+    {
+        free(matrix[i]); // Free each row
+    }
+    free(matrix); // Free the array of rows
+    matrix = NULL;
+
+    return 0;
+}
+\end{minted}
+
+
+
+
+
+
+\newpage
+\addcontentsline{toc}{part}{Lab Tasks}
+\part*{\centering Lab Tasks}
+
+
+\begin{enumerate}
+    \item 
+\end{enumerate}
+
+
+\newpage
+\addcontentsline{toc}{section}{ASCII Table}
+\section*{ASCII Table}
+% \newpage
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} 
+    \hline
+    \textbf{Dec} & \textbf{Hex} & \textbf{Char} & \textbf{Dec} & \textbf{Hex} & \textbf{Char} & \textbf{Dec} & \textbf{Hex} & \textbf{Char} & \textbf{Dec} & \textbf{Hex} & \textbf{Char} \\
+    \hline
+    0 & 00 & [NULL] & 32 & 20 & [SPACE] & 64 & 40 & @ & 96 & 60 & \textasciigrave \\
+    1 & 01 & [SOH] & 33 & 21 & ! & 65 & 41 & A & 97 & 61 & a \\
+    2 & 02 & [STX] & 34 & 22 & " & 66 & 42 & B & 98 & 62 & b \\
+    3 & 03 & [ETX] & 35 & 23 & \# & 67 & 43 & C & 99 & 63 & c \\
+    4 & 04 & [EOT] & 36 & 24 & \$ & 68 & 44 & D & 100 & 64 & d \\
+    5 & 05 & [ENQ] & 37 & 25 & \% & 69 & 45 & E & 101 & 65 & e \\
+    6 & 06 & [ACK] & 38 & 26 & \& & 70 & 46 & F & 102 & 66 & f \\
+    7 & 07 & [BEL] & 39 & 27 & ' & 71 & 47 & G & 103 & 67 & g \\
+    8 & 08 & [BS] & 40 & 28 & ( & 72 & 48 & H & 104 & 68 & h \\
+    9 & 09 & [TAB] & 41 & 29 & ) & 73 & 49 & I & 105 & 69 & i \\
+    10 & 0A & [LF] & 42 & 2A & * & 74 & 4A & J & 106 & 6A & j \\
+    11 & 0B & [VT] & 43 & 2B & + & 75 & 4B & K & 107 & 6B & k \\
+    12 & 0C & [FF] & 44 & 2C & , & 76 & 4C & L & 108 & 6C & l \\
+    13 & 0D & [CR] & 45 & 2D & - & 77 & 4D & M & 109 & 6D & m \\
+    14 & 0E & [SO] & 46 & 2E & . & 78 & 4E & N & 110 & 6E & n \\
+    15 & 0F & [SI] & 47 & 2F & / & 79 & 4F & O & 111 & 6F & o \\
+    16 & 10 & [DLE] & 48 & 30 & 0 & 80 & 50 & P & 112 & 70 & p \\
+    17 & 11 & [DC1] & 49 & 31 & 1 & 81 & 51 & Q & 113 & 71 & q \\
+    18 & 12 & [DC2] & 50 & 32 & 2 & 82 & 52 & R & 114 & 72 & r \\
+    19 & 13 & [DC3] & 51 & 33 & 3 & 83 & 53 & S & 115 & 73 & s \\
+    20 & 14 & [DC4] & 52 & 34 & 4 & 84 & 54 & T & 116 & 74 & t \\
+    21 & 15 & [NAK] & 53 & 35 & 5 & 85 & 55 & U & 117 & 75 & u \\
+    22 & 16 & [SYN] & 54 & 36 & 6 & 86 & 56 & V & 118 & 76 & v \\
+    23 & 17 & [ETB] & 55 & 37 & 7 & 87 & 57 & W & 119 & 77 & w \\
+    24 & 18 & [CAN] & 56 & 38 & 8 & 88 & 58 & X & 120 & 78 & x \\
+    25 & 19 & [EM] & 57 & 39 & 9 & 89 & 59 & Y & 121 & 79 & y \\
+    26 & 1A & [SUB] & 58 & 3A & : & 90 & 5A & Z & 122 & 7A & z \\
+    27 & 1B & [ESC] & 59 & 3B & ; & 91 & 5B & [ & 123 & 7B & \{ \\
+    28 & 1C & [FS] & 60 & 3C & < & 92 & 5C & \textbackslash & 124 & 7C & | \\
+    29 & 1D & [GS] & 61 & 3D & = & 93 & 5D & ] & 125 & 7D & \} \\
+    30 & 1E & [RS] & 62 & 3E & > & 94 & 5E & \textasciicircum & 126 & 7E & \textasciitilde \\
+    31 & 1F & [US] & 63 & 3F & ? & 95 & 5F & \_ & 127 & 7F & [DEL] \\
+    \hline
+    \end{tabular}
+}
+% \caption{Complete ASCII Character Table (0-127)}
+% \label{tab:ascii_complete}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
