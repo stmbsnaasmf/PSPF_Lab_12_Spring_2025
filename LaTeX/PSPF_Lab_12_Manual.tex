@@ -568,7 +568,7 @@ int main()
 
     for (int i = 0; i < noOfRows; i++)
     {
-        matrix[i] = malloc(noOfCols * sizeof(int));
+        matrix[i] = (int*) malloc(noOfCols * sizeof(int));
     }
 
     printMatrix(matrix, noOfRows, noOfCols);
@@ -610,6 +610,7 @@ int main()
 
 
 \begin{enumerate}
+ 
     \item Dynamically allocate a two dimensional array to represent a 2x2 matrix, and implement the function 
     \textcolor{red}{\texttt{int determinant2x2(int** matrix)}} to calculate the determinant of the matrix. Do not 
     forget to free the allocated memory properly.
@@ -687,7 +688,7 @@ int main()
     \item Dynamically allocate an array of integers and implement the function 
     \textcolor{red}{\texttt{void bubbleSortAsc(int* arr, int size)}} to sort the array in ascending order 
     using the bubble sort algorithm. Do not forget to free the allocated memory.
-    
+
 
 \end{enumerate}
 
@@ -747,7 +748,57 @@ int main()
 
 
 
+\newpage
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
 
+    string str = "24g-bCs007, hUzAiFa,";
+    string rollNo, name;
+
+    int commaIndex = 0; 			
+    // Always 10 becuase roll numbers are fixed length.
+    while (str[commaIndex] != ',')	
+    //This while loop is not necessary at all.
+    {
+        commaIndex++;
+    }
+
+    rollNo = str.substr(0, commaIndex);
+    cout << rollNo << "\n";
+
+    commaIndex = commaIndex + 2;	
+    //+2 to skip comma and the space character
+    int nameStart = commaIndex;
+    int nameLength = 0;
+    while (str[commaIndex] != ',')
+    {
+        commaIndex++;
+        nameLength++;
+    }
+
+    //	name = str.substr(12, commaIndex - 12);		
+    //We do not need really need any variable other than commaIndex.
+    name = str.substr(nameStart, nameLength);	
+    //This is just for clarification.
+    cout << name << "\n";
+
+\end{minted}
+
+\newpage
+\begin{minted}[bgcolor=bg, framesep=2mm]{cpp}
+
+char to_lowercase(char& c)
+{
+    cout << c << " ";
+    if (c >= 65 && c <=91)
+    {
+        c = c + 32;
+    }
+    cout << c << "\n";
+
+    return c;
+}
+
+\end{minted}
 
 
 
